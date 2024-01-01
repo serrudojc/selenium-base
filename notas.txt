@@ -1,0 +1,75 @@
+Selenium Intellij
+
+1- New Project
+	Build system: Maven
+	Adv Settings: 
+		GroupId: some name
+		ArtifactId: same project name
+2- Instalamos dependencias en POM
+	TestNG
+	Selenium
+	Apache Log4j API (Hace falta el otro Log4J deprecado?)
+	
+	Agregamos una linea de codigo para configurar suite de prubas, con un plugin
+	Adapta los comandos de MVN para ejectutar pruebas unitarias.
+	Configuramos la ubicacion de la suite.xml para el build
+	
+	<build>
+        <plugins>
+            <plugin>
+                <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.2.3</version>
+                    <configuration>
+                        <suiteXmlFiles>
+                            <suiteXmlFile>src/test/resources/suite.xml</suiteXmlFile>
+                        </suiteXmlFiles>
+                    </configuration>
+            </plugin>
+        </plugins>
+    </build>
+	
+	Se instala todo con mvn installa o con el icono de MVN en el IDE
+	
+3- Creamos la suite en un carpeta dentro de  test/resources/suite.xml (despues lo configuramos)
+
+4- Definimos el chromedriver en test/java/utils
+Creamos dentro una clase MyDriver que permite manejar el driver
+Creamos una carpeta en el root, /drivers donde colocamos el chromedriver
+
+5- Creamos carpeta y clase BasePage
+en utils/basePage/BasePage
+
+Esta clase tiene metodos comunes que herada a las demas paginas
+
+6- Creamos las pages que representan a las paginas de la web
+en test/java/pages
+
+7- Creamos una carpeta y clase BaseTest para los test
+test/java/utils/baseTest
+Aca colocamos metodos que se ejecutan siempre al cargar y finalizar (after, before)
+Metodo genericos, que son comunes a todas las paginas que no van en el BasePage
+
+8- Creamos el test en si
+src/test/java/test/nombreDeTest/TestVarios
+Cada test con su parametro
+
+9- Configuramos el suite.xml
+Para ver como enviar los parametros a los tests
+
+<suite name="Web Automation Suite">
+    <parameter name="url" value="https://www.wikipedia.org/"></parameter>
+    <parameter name="browser" value="chrome"></parameter>
+    <parameter name="textToSearch" value="Selenium"></parameter>
+    <test name="Search Test">
+        <clases>
+            <class name="test.WikipediaTests"></class>
+        </clases>
+    </test>
+</suite>
+
+Puede que pida agregar esto al principio y actualizamos mvn
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+10- Ejecutamos desde el suite.xml
